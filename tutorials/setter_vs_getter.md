@@ -43,21 +43,19 @@
 
 и в поле ввода пишем это
 
-\_$var\_name$ = None
 
-def set\_$var\_name$(self,$var\_name$):
-
-    self.\_$var\_name$ = $var\_name$
-
-def get\_$var\_name$(self):
-
-    return self.\_$var\_name$
-
-def del\_$var\_name$(self):
-
-    del self.\_$var\_name$
-
-$var\_name$ = property(get\_$var\_name$, set\_$var\_name$, del\_$var\_name$, &quot;I&#39;m the &#39;$var\_name$&#39; property.&quot;)
+>_$var_name$ = None
+>
+>def set_$var_name$(self,$var_name$):
+>    self._$var_name$ = $var_name$
+>
+>def get_$var_name$(self):
+>    return self._$var_name$
+>
+>def del_$var_name$(self):
+>    del self._$var_name$
+>
+>$var_name$ = property(get_$var_name$, set_$var_name$, del_$var_name$, "I'm the '$var_name$' property.")
 
  ![alt text](image/image10.png "xzxz")
 
