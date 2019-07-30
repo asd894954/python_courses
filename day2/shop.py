@@ -2,6 +2,7 @@ class Shop:
     name = None
     sel_item = 0
 
+
     def __init__(self, name, sel_item):
         self.name = name
         self.sel_item = sel_item
@@ -20,6 +21,8 @@ class Shop:
 
     def  get_self_stat(self):
         print(self.sel_item)
+
+
 
 
 
