@@ -1,0 +1,23 @@
+class  Singletone:
+    _instance  = None
+
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance  = super().__new__(cls)
+
+            return  cls._instance
+        else:
+            raise  Exception("Instance alredy exist ")
+
+
+
+class A(Singletone):
+    _name = None
+    def __init__(self, name):
+        self._name = name
+
+
+a1 = A("1")
+a2 = A("2")
+
