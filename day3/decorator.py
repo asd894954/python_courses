@@ -3,11 +3,11 @@ import requests
 
 
 
-def decorator( func  ):
+def decorator(func):
 
-    def wrapper0( url ):
+    def wrapper0(url):
 
-        def wrapper1(   count ):
+        def wrapper1(count):
 
             for i in range(count):
                 a = datetime.datetime.now()
