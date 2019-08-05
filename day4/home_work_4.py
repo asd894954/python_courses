@@ -46,7 +46,7 @@ class Persona( ):
         pass
 
 
-    @abstractmethod
+
     def get_age(self):
         today = datetime.date.today()
 
