@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import datetime
 
 class Persona( ):
 
@@ -47,11 +48,22 @@ class Persona( ):
 
     @abstractmethod
     def get_age(self):
-        pass
+        today = datetime.date.today()
+
+        if today.month < self.birthday.month or \
+                ( today.month == self.birthday.month and today.day < self.birthday.day ):
+            return today.year - self.birthday.year - 1
+        else:
+            return today.year - self.birthday.year
+
 
 
 
 class Abiturient(Persona):
+
+    def __init__(self, fio, fakultet, birthday):
+        super().__init__(fio, fakultet, birthday)
+
 
     def info(self):
         print( self.fio, self.birthday, self.fakultet )
@@ -81,8 +93,7 @@ class Student(Persona):
         print( self.fio, self.birthday, self.fakultet, self.kurs)
 
 
-    def get_age(self):
-        pass
+
 
 
 
@@ -126,17 +137,35 @@ class Teacher(Persona):
     def info(self):
         print( self.fio, self.birthday, self.fakultet, self.position, self.expirience )
 
-    def get_age(self):
-        pass
 
 
 
 
+persons = []
 
-students = []
+persons.append( Student('fio1', 'Python', datetime.date(1980, 1, 1), 4 ))
+persons.append( Student('fio2', 'Math', datetime.date(1980, 1, 20), 3 ))
 
-students.append( Student('fio1', 'Python', 123, 4 ))
+persons.append( Abiturient('fio3', 'Python', datetime.date(1980, 1, 20) ))
+persons.append( Abiturient('fio4', 'English', datetime.date(1979, 5, 20) ))
 
-students[0].info()
+persons.append(Teacher('Teacher 1','Slizerin',datetime.date(1945,6,22),'Archmag',40))
+persons.append(Teacher('Teacher 2','Slizerin',datetime.date(1945,5,22),'Archmag',41))
+
+
+
+
+for person in persons:
+    person.info()
+    # print( person.get_age())
+
+
+
+print("\nFiltered")
+persons2 = [person for person in persons if person.get_age() == 39 ]
+
+
+for person in persons2:
+    person.info( )
 
 
