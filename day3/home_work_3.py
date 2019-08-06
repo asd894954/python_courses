@@ -4,8 +4,7 @@ class Stack:
         for item in args:
             self._stack.append(item)
 
-
-    def push(self,item):
+    def push(self, item):
         self._stack.append(item)
 
     def pop(self):
@@ -13,7 +12,6 @@ class Stack:
         ret = self._stack[count]
         self._stack.pop(count)
         return ret
-
 
     def __str__(self):
         ret = ""
@@ -26,7 +24,7 @@ class Stack:
 
 
 print("Stack here")
-a = Stack( 1, 2, 3)
+a = Stack(1, 2, 3)
 a.push(4)
 
 print(a)
@@ -36,15 +34,14 @@ print(b)
 print(a)
 
 
-
 class Queue:
-    def __init__(self,*args):
+    def __init__(self, *args):
         self._queue = []
 
         for item in args:
             self._queue.append(item)
 
-    def push(self,item):
+    def push(self, item):
         self._queue.append(item)
 
     def get_first(self):
@@ -53,7 +50,7 @@ class Queue:
         return ret
 
     def count(self):
-        return len( self._queue )
+        return len(self._queue)
 
     def __str__(self):
         ret = ""
@@ -77,13 +74,12 @@ print(tmp)
 print(q)
 
 
-
 class ComplexNumber:
     def __init__(self, r, i):
         self._i = i
         self._r = r
 
-    def set_i(self,i):
+    def set_i(self, i):
         self._i = i
 
     def get_i(self):
@@ -94,7 +90,7 @@ class ComplexNumber:
 
     i = property(get_i, set_i, del_i, "I'm the 'i' property.")
 
-    def set_r(self,r):
+    def set_r(self, r):
         self._r = r
 
     def get_r(self):
@@ -112,7 +108,6 @@ class ComplexNumber:
         return ComplexNumber(self.r - other.r, self.i - other.i)
 
     def __mul__(self, other):
-
         i = self.i * other.r + self.r * other.i
 
         r = self.r * other.r - self.i * other.i
@@ -120,14 +115,13 @@ class ComplexNumber:
         return ComplexNumber(r, i)
 
     def __truediv__(self, other):
-
-        augmented = ComplexNumber( other.r, - other.i)
+        augmented = ComplexNumber(other.r, - other.i)
 
         dividen = self * augmented
 
-        module =  other.r ** 2 + other.i ** 2
+        tmp_var = other.r ** 2 + other.i ** 2
 
-        return ComplexNumber( dividen.r / module, dividen.i / module )
+        return ComplexNumber(dividen.r / tmp_var, dividen.i / tmp_var)
 
     def __str__(self):
         return "({}, {}i)".format(self.r, self.i)
@@ -141,13 +135,10 @@ print(a)
 print(b)
 
 print('a+b')
-print(a+b)
+print(a + b)
 print('a-b')
-print(a-b)
+print(a - b)
 print('a*b')
-print(a*b)
+print(a * b)
 print('a/b')
-print(a/b)
-
-
-
+print(a / b)

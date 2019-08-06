@@ -1,8 +1,8 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 import datetime
 
-class Persona( ):
 
+class Persona():
     def __init__(self, fio, fakultet, birthday):
         self._fio = fio
         self._fakultet = fakultet
@@ -45,39 +45,30 @@ class Persona( ):
     def info(self):
         pass
 
-
-
     def get_age(self):
         today = datetime.date.today()
 
         if today.month < self.birthday.month or \
-                ( today.month == self.birthday.month and today.day < self.birthday.day ):
+                (today.month == self.birthday.month and today.day < self.birthday.day):
             return today.year - self.birthday.year - 1
         else:
             return today.year - self.birthday.year
 
 
-
-
 class Abiturient(Persona):
-
     def __init__(self, fio, fakultet, birthday):
         super().__init__(fio, fakultet, birthday)
 
-
     def info(self):
-        print( self.fio, self.birthday, self.fakultet )
-
+        print(self.fio, self.birthday, self.fakultet)
 
 
 class Student(Persona):
-
     def __init__(self, fio, fakultet, birthday, kurs):
-        super().__init__(fio, fakultet, birthday )
+        super().__init__(fio, fakultet, birthday)
         self._kurs = kurs
 
-
-    def set_kurs(self,kurs):
+    def set_kurs(self, kurs):
         self._kurs = kurs
 
     def get_kurs(self):
@@ -88,26 +79,17 @@ class Student(Persona):
 
     kurs = property(get_kurs, set_kurs, del_kurs, "I'm the 'kurs' property.")
 
-
     def info(self):
-        print( self.fio, self.birthday, self.fakultet, self.kurs)
-
-
-
-
+        print(self.fio, self.birthday, self.fakultet, self.kurs)
 
 
 class Teacher(Persona):
-
-
-
-
     def __init__(self, fio, fakultet, birthday, position, expirience):
-        super().__init__(  fio, fakultet, birthday )
+        super().__init__(fio, fakultet, birthday)
         self._position = position
         self._expirience = expirience
 
-    def set_position(self,position):
+    def set_position(self, position):
         self._position = position
 
     def get_position(self):
@@ -118,10 +100,7 @@ class Teacher(Persona):
 
     position = property(get_position, set_position, del_position, "I'm the 'position' property.")
 
-
-
-
-    def set_expirience(self,expirience):
+    def set_expirience(self, expirience):
         self._expirience = expirience
 
     def get_expirience(self):
@@ -132,40 +111,27 @@ class Teacher(Persona):
 
     expirience = property(get_expirience, set_expirience, del_expirience, "I'm the 'expirience' property.")
 
-
-
     def info(self):
-        print( self.fio, self.birthday, self.fakultet, self.position, self.expirience )
-
-
-
+        print(self.fio, self.birthday, self.fakultet, self.position, self.expirience)
 
 
 persons = []
 
-persons.append( Student('fio1', 'Python', datetime.date(1980, 1, 1), 4 ))
-persons.append( Student('fio2', 'Math', datetime.date(1980, 1, 20), 3 ))
+persons.append(Student('fio1', 'Python', datetime.date(1980, 1, 1), 4))
+persons.append(Student('fio2', 'Math', datetime.date(1980, 1, 20), 3))
 
-persons.append( Abiturient('fio3', 'Python', datetime.date(1980, 1, 20) ))
-persons.append( Abiturient('fio4', 'English', datetime.date(1979, 5, 20) ))
+persons.append(Abiturient('fio3', 'Python', datetime.date(1980, 1, 20)))
+persons.append(Abiturient('fio4', 'English', datetime.date(1979, 5, 20)))
 
-persons.append(Teacher('Teacher 1','Slizerin',datetime.date(1945,6,22),'Archmag',40))
-persons.append(Teacher('Teacher 2','Slizerin',datetime.date(1945,5,22),'Archmag',41))
-
-
-
+persons.append(Teacher('Teacher 1', 'Slizerin', datetime.date(1945, 6, 22), 'Archmag', 40))
+persons.append(Teacher('Teacher 2', 'Slizerin', datetime.date(1945, 5, 22), 'Archmag', 41))
 
 for person in persons:
     person.info()
     # print( person.get_age())
 
-
-
 print("\nFiltered")
-persons2 = [person for person in persons if person.get_age() == 39 ]
-
+persons2 = [person for person in persons if person.get_age() == 39]
 
 for person in persons2:
-    person.info( )
-
-
+    person.info()
