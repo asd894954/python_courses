@@ -8,10 +8,7 @@ class Stack:
         self._stack.append(item)
 
     def pop(self):
-        count = len(self._stack) - 1
-        ret = self._stack[count]
-        self._stack.pop(count)
-        return ret
+        return self._stack.pop(len(self._stack) - 1)
 
     def __str__(self):
         ret = ""
@@ -45,9 +42,7 @@ class Queue:
         self._queue.append(item)
 
     def get_first(self):
-        ret = self._queue[0]
-        self._queue.pop(0)
-        return ret
+        return self._queue.pop(0)
 
     def count(self):
         return len(self._queue)
