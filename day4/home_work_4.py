@@ -9,7 +9,7 @@ class Person:
         self._birthday = birthday
 
     def set_birthday(self, birthday):
-        self._birthday = birthday   
+        self._birthday = birthday
 
     def get_birthday(self):
         return self._birthday
@@ -58,8 +58,8 @@ class Person:
         today = datetime.date.today()
 
         if today.month < self.birthday.month or \
-           (today.month == self.birthday.month  and
-                        today.day < self.birthday.day):
+                (today.month == self.birthday.month and
+                         today.day < self.birthday.day):
             return today.year - self.birthday.year - 1
         else:
             return today.year - self.birthday.year
@@ -70,7 +70,7 @@ class Enrollee(Person):
         super().__init__(name, faculty, birthday)
 
     def get_info(self):
-        return f"Имя: {self.name}\nДата рождения: {self.birthday}"+\
+        return f"Имя: {self.name}\nДата рождения: {self.birthday}" + \
                f"\nФакультет: {self.faculty}\n"
 
 
@@ -88,14 +88,15 @@ class Student(Person):
     def del_course(self):
         del self._course
 
-    course = property(get_course, set_course, del_course, "I'm the 'course' property.")
+    course = property(get_course,
+                      set_course,
+                      del_course,
+                      "I'm the 'course' property.")
 
     def get_info(self):
-        return f"Имя: {self.name}\nДата рождения: {self.birthday}"+\
-               f"\nФакультет: {self.faculty}"+\
+        return f"Имя: {self.name}\nДата рождения: {self.birthday}" + \
+               f"\nФакультет: {self.faculty}" + \
                f"\nКурс: {self.course}\n"
-
-
 
 
 class Teacher(Person):
@@ -113,7 +114,10 @@ class Teacher(Person):
     def del_position(self):
         del self._position
 
-    position = property(get_position, set_position, del_position, "I'm the 'position' property.")
+    position = property(get_position,
+                        set_position,
+                        del_position,
+                        "I'm the 'position' property.")
 
     def set_expirience(self, expirience):
         self._expirience = expirience
@@ -124,14 +128,16 @@ class Teacher(Person):
     def del_expirience(self):
         del self._expirience
 
-    expirience = property(get_expirience, set_expirience, del_expirience, "I'm the 'expirience' property.")
+    expirience = property(get_expirience,
+                          set_expirience,
+                          del_expirience,
+                          "I'm the 'expirience' property.")
 
     def get_info(self):
-        return f"Имя: {self.name}\nДата рождения: {self.birthday}"+\
-               f"\nФакультет: {self.faculty}"+\
-               f"\nПозиция: {self.position}"+ \
+        return f"Имя: {self.name}\nДата рождения: {self.birthday}" + \
+               f"\nФакультет: {self.faculty}" + \
+               f"\nПозиция: {self.position}" + \
                f"\nОпыт: {self.expirience}\n"
-
 
 
 persons = [Student('name1', 'Python', datetime.date(1980, 1, 1), 4),
