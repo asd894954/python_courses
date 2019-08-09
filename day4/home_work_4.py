@@ -2,14 +2,14 @@ from abc import abstractmethod
 import datetime
 
 
-class Persona():
-    def __init__(self, fio, fakultet, birthday):
-        self._fio = fio
-        self._fakultet = fakultet
+class Person:
+    def __init__(self, name, faculty, birthday):
+        self._name = name
+        self._faculty = faculty
         self._birthday = birthday
 
     def set_birthday(self, birthday):
-        self._birthday = birthday
+        self._birthday = birthday   
 
     def get_birthday(self):
         return self._birthday
@@ -17,75 +17,90 @@ class Persona():
     def del_birthday(self):
         del self._birthday
 
-    birthday = property(get_birthday, set_birthday, del_birthday, "I'm the 'birthday' property.")
+    birthday = property(get_birthday,
+                        set_birthday,
+                        del_birthday,
+                        "I'm the 'birthday' property.")
 
-    def set_fakultet(self, fakultet):
-        self._fakultet = fakultet
+    def set_faculty(self, faculty):
+        self._faculty = faculty
 
-    def get_fakultet(self):
-        return self._fakultet
+    def get_faculty(self):
+        return self._faculty
 
-    def del_fakultet(self):
-        del self._fakultet
+    def del_faculty(self):
+        del self._faculty
 
-    fakultet = property(get_fakultet, set_fakultet, del_fakultet, "I'm the 'fakultet' property.")
+    faculty = property(get_faculty,
+                       set_faculty,
+                       del_faculty,
+                       "I'm the 'faculty' property.")
 
-    def set_fio(self, fio):
-        self._fio = fio
+    def set_name(self, name):
+        self._name = name
 
-    def get_fio(self):
-        return self._fio
+    def get_name(self):
+        return self._name
 
-    def del_fio(self):
-        del self._fio
+    def del_name(self):
+        del self._name
 
-    fio = property(get_fio, set_fio, del_fio, "I'm the 'fio' property.")
+    name = property(get_name,
+                    set_name,
+                    del_name,
+                    "I'm the 'name' property.")
 
     @abstractmethod
-    def info(self):
+    def get_info(self):
         pass
 
     def get_age(self):
         today = datetime.date.today()
 
         if today.month < self.birthday.month or \
-                (today.month == self.birthday.month and today.day < self.birthday.day):
+           (today.month == self.birthday.month  and
+                        today.day < self.birthday.day):
             return today.year - self.birthday.year - 1
         else:
             return today.year - self.birthday.year
 
 
-class Abiturient(Persona):
-    def __init__(self, fio, fakultet, birthday):
-        super().__init__(fio, fakultet, birthday)
+class Enrollee(Person):
+    def __init__(self, name, faculty, birthday):
+        super().__init__(name, faculty, birthday)
 
-    def info(self):
-        print(self.fio, self.birthday, self.fakultet)
-
-
-class Student(Persona):
-    def __init__(self, fio, fakultet, birthday, kurs):
-        super().__init__(fio, fakultet, birthday)
-        self._kurs = kurs
-
-    def set_kurs(self, kurs):
-        self._kurs = kurs
-
-    def get_kurs(self):
-        return self._kurs
-
-    def del_kurs(self):
-        del self._kurs
-
-    kurs = property(get_kurs, set_kurs, del_kurs, "I'm the 'kurs' property.")
-
-    def info(self):
-        print(self.fio, self.birthday, self.fakultet, self.kurs)
+    def get_info(self):
+        return f"Имя: {self.name}\nДата рождения: {self.birthday}"+\
+               f"\nФакультет: {self.faculty}\n"
 
 
-class Teacher(Persona):
-    def __init__(self, fio, fakultet, birthday, position, expirience):
-        super().__init__(fio, fakultet, birthday)
+class Student(Person):
+    def __init__(self, name, faculty, birthday, course):
+        super().__init__(name, faculty, birthday)
+        self._course = course
+
+    def set_course(self, course):
+        self._course = course
+
+    def get_course(self):
+        return self._course
+
+    def del_course(self):
+        del self._course
+
+    course = property(get_course, set_course, del_course, "I'm the 'course' property.")
+
+    def get_info(self):
+        return f"Имя: {self.name}\nДата рождения: {self.birthday}"+\
+               f"\nФакультет: {self.faculty}"+\
+               f"\nКурс: {self.course}\n"
+
+
+
+
+class Teacher(Person):
+    def __init__(self, name, faculty, birthday, position, expirience):
+        super().__init__(name, faculty, birthday)
         self._position = position
         self._expirience = expirience
 
@@ -111,27 +126,27 @@ class Teacher(Persona):
 
     expirience = property(get_expirience, set_expirience, del_expirience, "I'm the 'expirience' property.")
 
-    def info(self):
-        print(self.fio, self.birthday, self.fakultet, self.position, self.expirience)
+    def get_info(self):
+        return f"Имя: {self.name}\nДата рождения: {self.birthday}"+\
+               f"\nФакультет: {self.faculty}"+\
+               f"\nПозиция: {self.position}"+ \
+               f"\nОпыт: {self.expirience}\n"
 
 
-persons = []
 
-persons.append(Student('fio1', 'Python', datetime.date(1980, 1, 1), 4))
-persons.append(Student('fio2', 'Math', datetime.date(1980, 1, 20), 3))
-
-persons.append(Abiturient('fio3', 'Python', datetime.date(1980, 1, 20)))
-persons.append(Abiturient('fio4', 'English', datetime.date(1979, 5, 20)))
-
-persons.append(Teacher('Teacher 1', 'Slizerin', datetime.date(1945, 6, 22), 'Archmag', 40))
-persons.append(Teacher('Teacher 2', 'Slizerin', datetime.date(1945, 5, 22), 'Archmag', 41))
+persons = [Student('name1', 'Python', datetime.date(1980, 1, 1), 4),
+           Student('name2', 'Math', datetime.date(1980, 1, 20), 3),
+           Enrollee('name3', 'Python', datetime.date(1980, 1, 20)),
+           Enrollee('name4', 'English', datetime.date(1979, 5, 20)),
+           Teacher('Teacher 1', 'Slizerin', datetime.date(1945, 6, 22), 'Archmag', 40),
+           Teacher('Teacher 2', 'Slizerin', datetime.date(1945, 5, 22), 'Archmag', 41)]
 
 for person in persons:
-    person.info()
+    print(person.get_info())
     # print( person.get_age())
 
 print("\nFiltered")
 persons2 = [person for person in persons if person.get_age() == 39]
 
 for person in persons2:
-    person.info()
+    print(person.get_info())
