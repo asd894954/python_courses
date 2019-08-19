@@ -43,7 +43,7 @@ class MyDict:
 
     def __add__(self, other):
         result = MyDict()
-        
+
         for key, value in self.items():
             result[key] = value
 

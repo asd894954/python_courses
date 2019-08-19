@@ -12,151 +12,127 @@ class Storage:
     def __init__(self, file_name='storage.db'):
         self._file_name = file_name
 
-    def set(self,key, value):
+    def set(self, key, value):
         with shelve.open(self._file_name)as db:
-            db[key]= value
+            db[key] = value
 
     def get(self, key, value=None):
         with shelve.open(self._file_name)as db:
-            result = db.get(key,value)
+            result = db.get(key, value)
         return result
-
 
 
 class Registaration:
 
-    def regTest(self,password,pattern, message):
+    @staticmethod
+    def reg_test(password, pattern, message):
 
         p = re.compile(pattern)
 
-        if not p.match( password ):
+        if not p.match(password):
             raise CustomException(f"Password:\"{password}\" must contain {message}")
 
-    def doRegister(self,login, password, password_confirmation):
-        if  password != password_confirmation:
+    def do_register(self, login, password, password_confirmation):
+        if password != password_confirmation:
             raise CustomException("Password not equal")
 
-        self.regTest(password, r'.{8,}','at least 8 character')
-        self.regTest(password,r".*\d", 'digit')
-        self.regTest(password,'.*[a-z]', 'lowercase later')
-        self.regTest(password,'.*[A-Z]', 'Uppercase later')
-        self.regTest(password,'.*[^\w\s]', 'Special character')
+        self.reg_test(password, r'.{8,}', 'at least 8 character')
+        self.reg_test(password, r".*\d", 'digit')
+        self.reg_test(password, '.*[a-z]', 'lowercase later')
+        self.reg_test(password, '.*[A-Z]', 'Uppercase later')
+        self.reg_test(password, '.*[^\w\s]', 'Special character')
 
         st = Storage()
 
-        users = st.get('users',[])
+        users = st.get('users', [])
 
         if login in users:
-            raise  CustomException('User alredy registered')
+            raise CustomException('User alredy registered')
 
-
-
-reg =  Registaration()
-
-try:
-    reg.doRegister('asd','aads','asds')
-except CustomException as error:
-    print(error)
-
-
-try:
-    reg.doRegister('asd','asd','asd')
-except CustomException as error:
-    print(error)
-
-
-try:
-    reg.doRegister('asd','asdasdasd','asdasdasd')
-except CustomException as error:
-    print(error)
-
-
-try:
-    reg.doRegister('asd','asdasdasd1','asdasdasd1')
-except CustomException as error:
-    print(error)
-
-
-try:
-    reg.doRegister('asd','ASDASDASD1','ASDASDASD1')
-except CustomException as error:
-    print(error)
-
-try:
-    reg.doRegister('asd','asdASDASDASD1','asdASDASDASD1')
-except CustomException as error:
-    print(error)
-
-try:
-    reg.doRegister('asd','~asdASDASDASD1','~asdASDASDASD1')
-except CustomException as error:
-    print(error)
 
 class User:
 
     def __init__(self):
         self.logout()
 
-
-
-
-    def _isAdmin(foo):
-        def decorator(self, *args,**kwargs):
+    def _is_admin(func):
+        def decorator(self, *args, **kwargs):
             if not self._admin:
                 raise CustomException("You are not admin")
             else:
-                foo(self,  *args,**kwargs)
+                func(self, *args, **kwargs)
+
         return decorator
 
-    def _isLogged(foo):
-        def decorator(self, *args,**kwargs):
+    def _is_logged(func):
+        def decorator(self, *args, **kwargs):
             if not self._logged:
                 raise CustomException("You are not logged")
             else:
-                foo(self, *args,**kwargs)
+                func(self, *args, **kwargs)
+
+        return decorator
+
+    def except_decorator(func):
+        def decorator(self, *args, **kwargs):
+            try:
+                func(self, *args, **kwargs)
+            except CustomException as error:
+                print(error)
+
         return decorator
 
     def logout(self):
         self._logged = None
         self._admin = None
-        self._login =None
+        self._login = None
 
-    def _notLogged(foo):
+    def _not_logged(func):
         def decorator(self, *args, **kwargs):
             if self._logged:
                 self.logout()
                 print('You are forced to logout')
-            foo(self, *args, **kwargs)
+            func(self, *args, **kwargs)
+
         return decorator
 
-    @_notLogged
+    @_not_logged
+    @except_decorator
     def register(self, login, password, password_confirmation):
         reg = Registaration()
-        reg.doRegister(login,password, password_confirmation)
+        reg.do_register(login, password, password_confirmation)
 
-    @_isLogged
+    @except_decorator
+    @_is_logged
     def list_post(self):
         pass
 
-    @_isLogged
-    @_isAdmin
+    @except_decorator
+    @_is_logged
+    @_is_admin
     def list_all_post(self):
         pass
 
-    @_isLogged
-    def add_post(self,post):
+    @except_decorator
+    @_is_logged
+    def add_post(self, post):
         pass
 
-
-    @_isLogged
-    @_isAdmin
+    @except_decorator
+    @_is_logged
+    @_is_admin
     def hello(self):
         print("hello")
 
 
 user = User()
 
-try:
-    user.hello()
-except CustomException as error:
-    print(error)
+user.hello()
+
+user.register('asd', 'aads', 'asds')
+user.register('asd', 'asd', 'asd')
+user.register('asd', 'asdasdasd', 'asdasdasd')
+user.register('asd', 'asdasdasd1', 'asdasdasd1')
+user.register('asd', 'ASDASDASD1', 'ASDASDASD1')
+user.register('asd', 'asdASDASDASD1', 'asdASDASDASD1')
+user.register('asd', '~asdASDASDASD1', '~asdASDASDASD1')
