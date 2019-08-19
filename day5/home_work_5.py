@@ -127,7 +127,7 @@ class User:
 
 user = User()
 
-user.hello()
+user.hello() 
 
 user.register('asd', 'aads', 'asds')
 user.register('asd', 'asd', 'asd')
