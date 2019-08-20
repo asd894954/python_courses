@@ -23,7 +23,6 @@ class Storage:
         return result
 
     def get_keys(self):
-
         with shelve.open(self._file_name)as db:
             result = list(db.keys())
         return result
@@ -45,9 +44,9 @@ class Registaration:
 
         self.reg_test(password, r'.{8,}', 'at least 8 character')
         self.reg_test(password, r".*\d", 'digit')
-        self.reg_test(password, '.*[a-z]', 'lowercase later')
-        self.reg_test(password, '.*[A-Z]', 'Uppercase later')
-        self.reg_test(password, '.*[^\w\s]', 'Special character')
+        self.reg_test(password, r'.*[a-z]', 'lowercase later')
+        self.reg_test(password, r'.*[A-Z]', 'Uppercase later')
+        self.reg_test(password, r'.*[^\w\s]', 'Special character')
 
         st = Storage()
 
@@ -56,12 +55,12 @@ class Registaration:
         if userexist:
             raise CustomException('User alredy registered')
 
-        user = dict([('login', login),
-                     ('password', password),
-                     ('isadmin', False),
-                     ('reg_date', datetime.now()),
-                     ('post', [])])
-        st.set(login, user)
+        reg_user = dict([('login', login),
+                         ('password', password),
+                         ('isadmin', False),
+                         ('reg_date', datetime.now()),
+                         ('post', [])])
+        st.set(login, reg_user)
 
 
 class User:
@@ -128,18 +127,18 @@ class User:
     def login(self, login, password):
         st = Storage()
 
-        user = st.get(login, None)
+        user_exist = st.get(login, None)
 
-        if not user:
+        if not user_exist:
             raise CustomException("wrong login or password")
 
-        if password != user['password']:
+        if password != user_exist['password']:
             raise CustomException("wrong login or password")
 
         self._logged = True
         self._login = login
-        self._admin = user['isadmin']
-        self._post = user['post']
+        self._admin = user_exist['isadmin']
+        self._post = user_exist['post']
 
     @except_decorator
     @_is_admin
@@ -160,10 +159,10 @@ class User:
     @_is_admin
     def list_post_for_user(self, user_login):
         st = Storage()
-        user = st.get(user_login, {})
+        cur_user = st.get(user_login, {})
 
-        if user != {}:
-            for date, post in user.get('post'):
+        if cur_user != {}:
+            for date, post in cur_user.get('post'):
                 print(date.strftime("%Y-%B-%d %X"), post)
 
     @except_decorator
@@ -171,10 +170,10 @@ class User:
     def add_post(self, post):
         st = Storage()
 
-        user = st.get(self._login)
+        cur_user = st.get(self._login)
         self._post.append((datetime.now(), post))
-        user['post'] = self._post
-        st.set(self._login, user)
+        cur_user['post'] = self._post
+        st.set(self._login, cur_user)
 
 
 user = User()
@@ -204,7 +203,6 @@ user.list_users()
 user.make_me_admin()
 user.list_users()
 user.list_post_for_user('asd2')
-
 
 # 4) Создать подобие социальной сети. Описать классы, которые должны выполнять
 # соответствующие функции (Предлагаю насследовать класс авторизации от класса регистрации).
