@@ -29,7 +29,6 @@ class Storage:
 
 
 class Registaration:
-
     @staticmethod
     def reg_test(password, pattern, message):
 
@@ -64,6 +63,47 @@ class Registaration:
 
 
 class User:
+    class Deco:
+
+        @classmethod
+        def is_logged(cls,func):
+            def decorator(self, *args, **kwargs):
+                if not self._logged:
+                    raise CustomException("You are not logged")
+                else:
+                    func(self, *args, **kwargs)
+
+            return decorator
+
+        @classmethod
+        def not_logged(cls,func):
+            def decorator(self, *args, **kwargs):
+                if self._logged:
+                    self.logout()
+                    print('You are forced to logout')
+                func(self, *args, **kwargs)
+
+            return decorator
+
+        @classmethod
+        def is_admin(cls,func):
+            def decorator(self, *args, **kwargs):
+                if not self._admin:
+                    raise CustomException("You are not admin")
+                else:
+                    func(self, *args, **kwargs)
+
+            return decorator
+
+        @classmethod
+        def except_decorator(cls,func):
+            def decorator(self, *args, **kwargs):
+                try:
+                    func(self, *args, **kwargs)
+                except CustomException as error:
+                    print(error)
+
+            return decorator
 
     def __init__(self):
         self._logged = None
@@ -74,56 +114,21 @@ class User:
     def make_me_admin(self):
         self._admin = True
 
-    def _is_admin(func):
-        def decorator(self, *args, **kwargs):
-            if not self._admin:
-                raise CustomException("You are not admin")
-            else:
-                func(self, *args, **kwargs)
-
-        return decorator
-
-    def _is_logged(func):
-        def decorator(self, *args, **kwargs):
-            if not self._logged:
-                raise CustomException("You are not logged")
-            else:
-                func(self, *args, **kwargs)
-
-        return decorator
-
-    def except_decorator(func):
-        def decorator(self, *args, **kwargs):
-            try:
-                func(self, *args, **kwargs)
-            except CustomException as error:
-                print(error)
-
-        return decorator
-
     def logout(self):
         self._logged = None
         self._admin = None
         self._login = None
         self._post = []
 
-    def _not_logged(func):
-        def decorator(self, *args, **kwargs):
-            if self._logged:
-                self.logout()
-                print('You are forced to logout')
-            func(self, *args, **kwargs)
-
-        return decorator
-
-    @_not_logged
-    @except_decorator
+    @Deco.not_logged
+    @Deco.except_decorator
     def register(self, login, password, password_confirmation):
         reg = Registaration()
         reg.do_register(login, password, password_confirmation)
 
-    @_not_logged
-    @except_decorator
+
+    @Deco.except_decorator
+    @Deco.not_logged
     def login(self, login, password):
         st = Storage()
 
@@ -140,23 +145,23 @@ class User:
         self._admin = user_exist['isadmin']
         self._post = user_exist['post']
 
-    @except_decorator
-    @_is_admin
+    @Deco.except_decorator
+    @Deco.is_admin
     def list_users(self):
         st = Storage()
 
         users = st.get_keys()
         print(users)
 
-    @except_decorator
-    @_is_logged
+    @Deco.except_decorator
+    @Deco.is_logged
     def list_post(self):
         for date, post in self._post:
             print(date.strftime("%Y-%B-%d %X"), post)
 
-    @except_decorator
-    @_is_logged
-    @_is_admin
+    @Deco.except_decorator
+    @Deco.is_logged
+    @Deco.is_admin
     def list_post_for_user(self, user_login):
         st = Storage()
         cur_user = st.get(user_login, {})
@@ -165,8 +170,8 @@ class User:
             for date, post in cur_user.get('post'):
                 print(date.strftime("%Y-%B-%d %X"), post)
 
-    @except_decorator
-    @_is_logged
+    @Deco.except_decorator
+    @Deco.is_logged
     def add_post(self, post):
         st = Storage()
 
@@ -178,7 +183,7 @@ class User:
 
 user = User()
 
-user_register_login = 'asd2'
+user_register_login = 'asd3'
 
 user.register(user_register_login, 'aads', 'asds')
 user.register(user_register_login, 'asd', 'asd')
@@ -191,6 +196,7 @@ user.register(user_register_login, '~asdASDASDASD1', '~asdASDASDASD1')
 
 user.login('asd', 'asd')
 user.login(user_register_login, 'asd')
+user.login(user_register_login, '~asdASDASDASD1')
 user.login(user_register_login, '~asdASDASDASD1')
 
 user.add_post('Первый твит')
