@@ -66,7 +66,7 @@ class User:
     class Deco:
 
         @classmethod
-        def is_logged(cls,func):
+        def is_logged(cls, func):
             def decorator(self, *args, **kwargs):
                 if not self._logged:
                     raise CustomException("You are not logged")
@@ -76,7 +76,7 @@ class User:
             return decorator
 
         @classmethod
-        def not_logged(cls,func):
+        def not_logged(cls, func):
             def decorator(self, *args, **kwargs):
                 if self._logged:
                     self.logout()
@@ -86,7 +86,7 @@ class User:
             return decorator
 
         @classmethod
-        def is_admin(cls,func):
+        def is_admin(cls, func):
             def decorator(self, *args, **kwargs):
                 if not self._admin:
                     raise CustomException("You are not admin")
@@ -96,7 +96,7 @@ class User:
             return decorator
 
         @classmethod
-        def except_decorator(cls,func):
+        def except_decorator(cls, func):
             def decorator(self, *args, **kwargs):
                 try:
                     func(self, *args, **kwargs)
@@ -125,7 +125,6 @@ class User:
     def register(self, login, password, password_confirmation):
         reg = Registaration()
         reg.do_register(login, password, password_confirmation)
-
 
     @Deco.except_decorator
     @Deco.not_logged
